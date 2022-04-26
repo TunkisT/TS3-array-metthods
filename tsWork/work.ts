@@ -30,11 +30,8 @@ function firstFour(argument: number[]): number[] {
 // console.log(firstFour(numbers));
 
 // 4.1 ta pati funkcija bet su papildomu string argumentu. jei argumentas === 'last' grazinam paskutinius 4 elementus, jei nera argumento pirmus 4.
-function lastFour(arr: number[], argument: string = ''): number[] {
-  if (argument === 'last') {
-    return arr.slice(-4);
-  }
-  return arr.slice(0, 4);
+function lastFour(arr: number[], argument?: string): number[] {
+  return argument === 'last' ? arr.slice(-4) : arr.slice(0, 4);
 }
 // console.log(lastFour(numbers, 'last'));
 // console.log(lastFour(numbers));
@@ -79,7 +76,19 @@ function setDark(): string {
 // naudojam data.js items masyva
 
 // s1. isikelti i ts faila ir parasyti kokio tipo duomenys yra items masyve ir pats masyvas
-const items = [
+interface shopItems {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+  rating: {
+    rate: number;
+    count: number;
+  };
+}
+const items: shopItems[] = [
   {
     id: 1,
     title: 'Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops',
@@ -351,12 +360,17 @@ const items = [
 // -- kuriam funkcijas kurios masyva gauna kaip argumenta --
 
 // s2. parasysti funkcija kuri grazina objektu masyva su pavadinimu ir kaina {price: 45, name: 'shoues'}
-
+interface titleAndPrice {
+  name: string;
+  price: number;
+}
 function returnS2() {
-  const result: string | number = items.map(({ title, price }) => ({
-    name: title,
-    price: price,
-  }));
+  const result: titleAndPrice[] = items.map(
+    ({title, price}:{ title: string, price: number }) => ({
+      name: title,
+      price: price,
+    })
+  );
   return result;
 }
 // console.log(returnS2());

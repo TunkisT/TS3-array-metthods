@@ -14,11 +14,8 @@ function returnArrOfObj(array) {
 function firstFour(argument) {
     return argument.slice(0, 4);
 }
-function lastFour(arr, argument = '') {
-    if (argument === 'last') {
-        return arr.slice(-4);
-    }
-    return arr.slice(0, 4);
+function lastFour(arr, argument) {
+    return argument === 'last' ? arr.slice(-4) : arr.slice(0, 4);
 }
 function renderDom(msg, dest) {
     const app = document.getElementById(dest) || null;
