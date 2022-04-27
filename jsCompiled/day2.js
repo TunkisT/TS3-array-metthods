@@ -93,3 +93,17 @@ function findByName(arr, name) {
     const result = arr.filter((obj) => obj.name === name);
     result.length === 0 ? console.log('{err: not found}') : console.log(result);
 }
+function fn9(arg) {
+    const surArr = arg.map((obj) => obj.surname);
+    const result = surArr.map((item) => `${item} length: ${item.length}`);
+    return result;
+}
+function fn10(arg) {
+    const newArr = arg.map((obj) => (Object.assign(Object.assign({}, obj), { isArchived: false })));
+    return newArr;
+}
+const newPeopleArray = fn10(people);
+function makeDelete(arr, index) {
+    arr[index].isArchived = true;
+}
+makeDelete(newPeopleArray, 0);

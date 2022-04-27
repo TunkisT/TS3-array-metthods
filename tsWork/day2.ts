@@ -141,16 +141,49 @@ function fn7(arg: peopleObj[]): number[] {
 //    8.1 jei nerandam grazinam nauja objekta {err: not found}
 
 function findByName(arr: peopleObj[], name: string): void {
-  const result = arr.filter((obj) => obj.name === name);
+  const result: peopleObj[] = arr.filter((obj: peopleObj) => obj.name === name);
   result.length === 0 ? console.log('{err: not found}') : console.log(result);
 }
 // findByName(people, 'Jonas');
 // 9. parasyti fn kuri grazina visu zmoniu pavardziu ilgius.
 
-
+function fn9(arg: peopleObj[]): string[] {
+  const surArr: string[] = arg.map((obj: peopleObj) => obj.surname);
+  const result: string[] = surArr.map(
+    (item: string) => `${item} length: ${item.length}`
+  );
+  return result;
+}
+// console.log(fn9(people));
 
 // 10. parasyti fn kuri grazina nauja masyva su objektais kurie turi papildoma key=value. Pridekime {isArchived: false} kiekvienam person objektui. Aprasyti tipa kuri grazina fn.
+interface newPeopleObj {
+  name: string;
+  surname: string;
+  sex: string;
+  age: number;
+  income: number;
+  married: boolean;
+  hasCar: boolean;
+  isArchived: boolean;
+}
+
+function fn10(arg: peopleObj[]): newPeopleObj[] {
+  const newArr: newPeopleObj[] = arg.map((obj: peopleObj) => ({
+    ...obj,
+    isArchived: false,
+  }));
+  return newArr;
+}
+const newPeopleArray = fn10(people);
+
 // 11. issaugoti 10 punkte gauta rezultata ir paduoti i i funkcija makeDelete(<arr>, <index>). Funkcija gautame masyve index elemente pakeicia 'isArchived' savybe i true.
+
+function makeDelete(arr: newPeopleObj[], index: number): void {
+  arr[index].isArchived = true;
+}
+makeDelete(newPeopleArray, 0);
+// console.log('newPeopleArray after ===', newPeopleArray[0]);
 
 // ## DOM public index.html
 
