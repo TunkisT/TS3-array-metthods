@@ -64,6 +64,7 @@ const people: peopleObj[] = [
     hasCar: false,
   },
 ];
+import { items } from '../data/day1.js';
 
 // 1. parasyti Fn kuri atspausdina visus vyrus
 
@@ -121,7 +122,7 @@ function fn6(arg: peopleObj[]): void {
     (obj: peopleObj) => obj.hasCar === true
   );
   const resultArr = drives.map((obj: peopleObj) => obj.sex);
-  let counts = {};
+  let counts: any = {};
   resultArr.forEach(function (x) {
     counts[x] = (counts[x] || 0) + 1;
   });
@@ -186,10 +187,33 @@ makeDelete(newPeopleArray, 0);
 // console.log('newPeopleArray after ===', newPeopleArray[0]);
 
 // ## DOM public index.html
-
 // ### naudojam data/data.js
 
 // 1d. Sugeneruoti items ul elemente li elementus su prekiu pavadinimu ir kaina ir mygtuku buy
 // 2d. pasaudus mygtuka nuperkam preke. Tai reiskia pasalinam ja is saraso.
 // 2.1d Susikuriam masyva cart. jis tures objektus {title: , price: , qty: 1}. paspaudus buy, ikeliam ta preke i cart masyva.
 // 3d atvaizduojam cart masyva po prekiu sarasu.
+interface shopItems {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+  rating: {
+    rate: number;
+    count: number;
+  };
+}
+console.log('items ===', items);
+function createElements(arg: shopItems[]) {
+  const cards = (document.getElementById('cards') as HTMLDivElement) || null;
+  const list = document.createElement('ul');
+  cards.append(list);
+  arg.forEach((obj) => {
+    list.innerHTML += `
+    <li>${obj.title} ${obj.price}$ <button>BUY</button> </li>
+      `;
+  });
+}
+createElements(items);

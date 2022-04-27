@@ -1,4 +1,3 @@
-"use strict";
 const people = [
     {
         name: 'Jonas',
@@ -55,6 +54,7 @@ const people = [
         hasCar: false,
     },
 ];
+import { items } from '../data/day1.js';
 function fn1(arg) {
     const result = arg.filter((obj) => obj.sex === 'male');
     console.log(result);
@@ -107,3 +107,15 @@ function makeDelete(arr, index) {
     arr[index].isArchived = true;
 }
 makeDelete(newPeopleArray, 0);
+console.log('items ===', items);
+function createElements(arg) {
+    const cards = document.getElementById('cards') || null;
+    const list = document.createElement('ul');
+    cards.append(list);
+    arg.forEach((obj) => {
+        list.innerHTML += `
+    <li>${obj.title} ${obj.price}$ <button>BUY</button> </li>
+      `;
+    });
+}
+createElements(items);
