@@ -107,23 +107,23 @@ function makeDelete(arr, index) {
     arr[index].isArchived = true;
 }
 makeDelete(newPeopleArray, 0);
-console.log('items ===', items);
 const cards = document.getElementById('cards') || null;
-const list = document.createElement('ul');
+const list = document.createElement('ol');
 function createElements(arg) {
+    if (list)
+        list.innerHTML = '';
     cards.append(list);
     arg.forEach((obj) => {
         list.innerHTML += `
-    <li id='item'>${obj.title} ${obj.price}$ 
+    <li id='item'>${obj.title.slice(0, 15)} ${obj.price}$ 
     <button data-id=${obj.id} class='buy'>BUY</button> </li>
       `;
     });
 }
-createElements(items);
+createElements(items.slice(0, 5));
 let cart = [];
 list.addEventListener('click', (event) => {
     event.preventDefault();
-    const item = document.getElementById('item');
     if (event.target.classList.contains('buy')) {
         const itemId = event.target.dataset.id - 1;
         const { title, price, rating } = items[itemId];
@@ -133,7 +133,32 @@ list.addEventListener('click', (event) => {
             qty: rating.count,
         };
         cart.push(newObj);
-        item.remove();
-        console.log('cart ===', cart);
+        showCart(cart);
+    }
+});
+const result = document.getElementById('result') || null;
+function showCart(data) {
+    result.innerHTML = '';
+    data.forEach((obj) => {
+        result.innerHTML += `
+    <div class='card'>
+    <h4>${obj.title}</h4>
+    <h4>${obj.price}$</h4>
+    <h4>${obj.qty} items</h4>
+    </div>
+    `;
+    });
+}
+const btnSort = document.getElementById('sort');
+btnSort === null || btnSort === void 0 ? void 0 : btnSort.addEventListener('click', (e) => {
+    console.log('sort');
+    const sortedItems = items.sort((a, b) => a.price - b.price);
+    createElements(sortedItems);
+});
+const minus = document.getElementById('minus');
+const counter = document.getElementById('counter');
+minus === null || minus === void 0 ? void 0 : minus.addEventListener('click', (e) => {
+    if ((counter === null || counter === void 0 ? void 0 : counter.innerHTML) > '0') {
+        counter.innerHTML -= 1;
     }
 });

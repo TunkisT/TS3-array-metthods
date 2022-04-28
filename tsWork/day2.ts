@@ -196,6 +196,8 @@ makeDelete(newPeopleArray, 0);
 // 2d. pasaudus mygtuka nuperkam preke. Tai reiskia pasalinam ja is saraso.
 // 2.1d Susikuriam masyva cart. jis tures objektus {title: , price: , qty: 1}. paspaudus buy, ikeliam ta preke i cart masyva.
 // 3d atvaizduojam cart masyva po prekiu sarasu.
+
+// console.log('items ===', items);
 interface shopItems {
   id: number;
   title: string;
@@ -208,21 +210,21 @@ interface shopItems {
     count: number;
   };
 }
-console.log('items ===', items);
 
 const cards = (document.getElementById('cards') as HTMLDivElement) || null;
-const list = document.createElement('ul') as HTMLUListElement;
+const list = document.createElement('ol') as HTMLUListElement;
 
 function createElements(arg: shopItems[]) {
+  if (list) list.innerHTML = '';
   cards.append(list);
-  arg.forEach((obj) => {
+  arg.forEach((obj: shopItems) => {
     list.innerHTML += `
-    <li id='item'>${obj.title} ${obj.price}$ 
+    <li id='item'>${obj.title.slice(0, 15)} ${obj.price}$ 
     <button data-id=${obj.id} class='buy'>BUY</button> </li>
       `;
   });
 }
-createElements(items);
+createElements(items.slice(0, 5));
 interface CartObj {
   title: string;
   price: number;
@@ -232,9 +234,8 @@ let cart: CartObj[] = [];
 
 list.addEventListener('click', (event) => {
   event.preventDefault();
-  const item = document.getElementById('item') as HTMLUListElement;
   if (event.target.classList.contains('buy')) {
-    const itemId = event.target.dataset.id - 1;
+    const itemId: number = event.target.dataset.id - 1;
     const { title, price, rating } = items[itemId];
     const newObj: CartObj = {
       title,
@@ -242,7 +243,38 @@ list.addEventListener('click', (event) => {
       qty: rating.count,
     };
     cart.push(newObj);
-    item.remove();
-    console.log('cart ===', cart);
+    showCart(cart);
+  }
+});
+
+const result = (document.getElementById('result') as HTMLDivElement) || null;
+function showCart(data: CartObj[]) {
+  result.innerHTML = '';
+  data.forEach((obj) => {
+    result.innerHTML += `
+    <div class='card'>
+    <h4>${obj.title}</h4>
+    <h4>${obj.price}$</h4>
+    <h4>${obj.qty} items</h4>
+    </div>
+    `;
+  });
+}
+
+const btnSort: HTMLElement | null = document.getElementById('sort');
+
+btnSort?.addEventListener('click', (e) => {
+  console.log('sort');
+  const sortedItems = items.sort(
+    (a: shopItems, b: shopItems) => a.price - b.price
+  );
+  createElements(sortedItems);
+});
+
+const minus = document.getElementById('minus') as HTMLButtonElement;
+const counter = document.getElementById('counter') as HTMLParagraphElement;
+minus?.addEventListener('click', (e) => {
+  if (counter?.innerHTML > '0') {
+    counter.innerHTML -= 1;
   }
 });
