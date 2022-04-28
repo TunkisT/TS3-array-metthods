@@ -69,7 +69,7 @@ import { items } from '../data/day1.js';
 // 1. parasyti Fn kuri atspausdina visus vyrus
 
 function fn1(arg: peopleObj[]): void {
-  const result = arg.filter((obj: peopleObj) => obj.sex === 'male');
+  const result = arg.filter((obj: peopleObj): boolean => obj.sex === 'male');
   console.log(result);
 }
 // fn1(people);
@@ -87,9 +87,7 @@ function fn2(arg: peopleObj[]): peopleObj[] {
 // 3. parasyti Fn kuri grazina masyve visus žmones kurie turi mašinas
 
 function fn3(arg: peopleObj[]): peopleObj[] {
-  const result: peopleObj[] = arg.filter(
-    (obj: peopleObj) => obj.hasCar === true
-  );
+  const result: peopleObj[] = arg.filter((obj: peopleObj) => obj.hasCar);
   return result;
 }
 // console.log(fn3(people));
@@ -114,21 +112,26 @@ function fn5(arg: peopleObj[]): void {
   console.log(result);
 }
 // fn5(people);
-
+//
 // 6. parasyti fn kuri suskaiciuoja ir grazina kiek yra vairuojanciu vyru ir moteru pvz {man: 4, woman: 5}
 
-function fn6(arg: peopleObj[]): void {
+interface DriverObj {
+  man: number;
+  woman: number;
+}
+
+function fn6(arg: peopleObj[]): DriverObj {
   const drives: peopleObj[] = arg.filter(
-    (obj: peopleObj) => obj.hasCar === true
+    (obj: peopleObj): boolean => obj.hasCar
   );
-  const resultArr = drives.map((obj: peopleObj) => obj.sex);
+  const resultArr: string[] = drives.map((obj: peopleObj): string => obj.sex);
   let counts: any = {};
   resultArr.forEach(function (x) {
     counts[x] = (counts[x] || 0) + 1;
   });
-  console.log(counts);
+  return counts;
 }
-// fn6(people);
+// console.log(fn6(people));
 
 // 7. parasyti fn kuri grazintu amziu masyva.
 
@@ -206,14 +209,40 @@ interface shopItems {
   };
 }
 console.log('items ===', items);
+
+const cards = (document.getElementById('cards') as HTMLDivElement) || null;
+const list = document.createElement('ul') as HTMLUListElement;
+
 function createElements(arg: shopItems[]) {
-  const cards = (document.getElementById('cards') as HTMLDivElement) || null;
-  const list = document.createElement('ul');
   cards.append(list);
   arg.forEach((obj) => {
     list.innerHTML += `
-    <li>${obj.title} ${obj.price}$ <button>BUY</button> </li>
+    <li id='item'>${obj.title} ${obj.price}$ 
+    <button data-id=${obj.id} class='buy'>BUY</button> </li>
       `;
   });
 }
 createElements(items);
+interface CartObj {
+  title: string;
+  price: number;
+  qty: number;
+}
+let cart: CartObj[] = [];
+
+list.addEventListener('click', (event) => {
+  event.preventDefault();
+  const item = document.getElementById('item') as HTMLUListElement;
+  if (event.target.classList.contains('buy')) {
+    const itemId = event.target.dataset.id - 1;
+    const { title, price, rating } = items[itemId];
+    const newObj: CartObj = {
+      title,
+      price,
+      qty: rating.count,
+    };
+    cart.push(newObj);
+    item.remove();
+    console.log('cart ===', cart);
+  }
+});

@@ -64,7 +64,7 @@ function fn2(arg) {
     return result;
 }
 function fn3(arg) {
-    const result = arg.filter((obj) => obj.hasCar === true);
+    const result = arg.filter((obj) => obj.hasCar);
     return result;
 }
 function fn4(arg) {
@@ -77,13 +77,13 @@ function fn5(arg) {
     console.log(result);
 }
 function fn6(arg) {
-    const drives = arg.filter((obj) => obj.hasCar === true);
+    const drives = arg.filter((obj) => obj.hasCar);
     const resultArr = drives.map((obj) => obj.sex);
     let counts = {};
     resultArr.forEach(function (x) {
         counts[x] = (counts[x] || 0) + 1;
     });
-    console.log(counts);
+    return counts;
 }
 function fn7(arg) {
     const result = arg.map((obj) => obj.age);
@@ -108,14 +108,32 @@ function makeDelete(arr, index) {
 }
 makeDelete(newPeopleArray, 0);
 console.log('items ===', items);
+const cards = document.getElementById('cards') || null;
+const list = document.createElement('ul');
 function createElements(arg) {
-    const cards = document.getElementById('cards') || null;
-    const list = document.createElement('ul');
     cards.append(list);
     arg.forEach((obj) => {
         list.innerHTML += `
-    <li>${obj.title} ${obj.price}$ <button>BUY</button> </li>
+    <li id='item'>${obj.title} ${obj.price}$ 
+    <button data-id=${obj.id} class='buy'>BUY</button> </li>
       `;
     });
 }
 createElements(items);
+let cart = [];
+list.addEventListener('click', (event) => {
+    event.preventDefault();
+    const item = document.getElementById('item');
+    if (event.target.classList.contains('buy')) {
+        const itemId = event.target.dataset.id - 1;
+        const { title, price, rating } = items[itemId];
+        const newObj = {
+            title,
+            price,
+            qty: rating.count,
+        };
+        cart.push(newObj);
+        item.remove();
+        console.log('cart ===', cart);
+    }
+});
